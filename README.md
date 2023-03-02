@@ -30,7 +30,7 @@ agendar locações
 - O sistema gerencia categorias de carros e modelos de carros disponíveis para
   locação, sem distinção de filiais
 - A categoria de um carro define seu preço padrão de locação, no entanto é
-  possívei customizar os preços de locação por filial
+  possíveis customizar os preços de locação por filial
 - Um carro da frota deve ser sempre vinculado a um a filial
 - Uma locação deve ser agendada, definindo o cliente, as datas de retirada e
   devolução e a categoria de carro. Nesse momento é feita uma validação de que

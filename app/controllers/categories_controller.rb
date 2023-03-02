@@ -1,44 +1,48 @@
 # frozen_string_literal: true
 
-class CategoriesController < ApplicationController
-  before_action :authorize_admin
+class CorporateClientsController < ApplicationController
+  before_action :authenticate_user!
 
   def index
-    @categories = Category.all
+    @corporate_clients = CorporateClient.all
+  end
+
+  def show
+    @corporate_client = CorporateClient.find(params[:id])
   end
 
   def new
-    @category = Category.new
+    @corporate_client = CorporateClient.new
+    @corporate_client.build_address
+  end
+
+  def edit
+    @corporate_client = CorporateClient.find(params[:id])
   end
 
   def create
-    @category = Category.new(category_params)
-    if @category.save
-      Subsidiary.all.each do |subsidiary|
-        RentalPrice.create!(category: @category, subsidiary: subsidiary,
-                            daily_rate: @category.daily_rate)
-      end
-      redirect_to categories_path
+    @corporate_client = CorporateClient.new(corporate_client_params)
+    if @corporate_client.save
+      redirect_to @corporate_client
     else
       render :new
     end
   end
 
-  def edit
-    @category = Category.find(params[:id])
-  end
-
   def update
-    @category = Category.find(params[:id])
-    return redirect_to categories_path if @category.update(category_params)
-
-    render :edit
+    @corporate_client = CorporateClient.find(params[:id])
+    if @corporate_client.update(corporate_client_params)
+      redirect_to @corporate_client
+    else
+      render :edit
+    end
   end
 
   private
 
-  def category_params
-    params.require(:category).permit(:name, :daily_rate, :car_insurance,
-                                     :third_party_insurance)
+  def corporate_client_params
+    params.require(:corporate_client)
+          .permit(:trade_name, :cnpj, :email, address_attributes: %i[id street number complement
+                                                                     neighborhood city state])
   end
 end
